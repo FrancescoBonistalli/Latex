@@ -1,0 +1,156 @@
+\documentclass[11pt,a4paper,]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,italian]{babel}
+%-----------------------------------------------
+%margini foglio
+%-----------------------------------------------
+\usepackage[a4paper, total={6in, 9in}]{geometry}
+%-----------------------------------------------
+%pacchetti
+%-----------------------------------------------
+\usepackage{hycolor}
+\usepackage{xcolor}
+%colore link
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=blue]{hyperref}
+
+
+\usepackage{graphicx}
+\usepackage{float}
+
+
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{thmtools}
+\usepackage{listings} 
+
+\usepackage{wrapfig}
+\usepackage{xcolor}
+
+\usepackage{amsmath,amssymb}
+\usepackage{latexsym}
+
+\usepackage{pdfpages}
+
+\usepackage{mathrsfs}
+
+\usepackage{multirow}
+
+\usepackage{array}
+%-----------------------------------------------
+
+%teoremi
+%-----------------------------------------------
+\declaretheoremstyle[
+% headformat=\NAME\NOTE,
+headfont=\bfseries\itshape,
+notefont=\normalfont\large\bfseries,
+notebraces={}{},
+headpunct=,
+bodyfont=\normalfont,
+postheadspace=\newline,
+qed=\qedsymbol
+]{mystyle}
+\declaretheorem[style=mystyle]{teorema}
+
+\declaretheoremstyle[
+% headformat=\NAME\NOTE,
+headfont=\bfseries\itshape,
+notefont=\normalfont\large\bfseries,
+notebraces={- }{},
+headpunct=,
+bodyfont=\normalfont,
+postheadspace=\newline,
+qed=\qedsymbol
+]{defstyle}
+\declaretheorem[style=defstyle]{definizione}
+
+
+% \declaretheorem[style=mystyle]{algoritmo}
+
+\declaretheorem[style=mystyle, numberwithin=part]{algoritmo}
+
+
+\declaretheoremstyle[
+notebraces={: }{},
+headpunct=:,
+headformat=\NAME\NOTE,
+bodyfont=\normalfont\itshape
+]{notastyle}
+\declaretheorem[style=notastyle]{nota}
+
+\declaretheoremstyle[
+notebraces={}{},
+headpunct=:,
+bodyfont=\normalfont,
+qed=\qedsymbol
+]{esempiostyle}
+\declaretheorem[style=esempiostyle]{esempio}
+
+
+\declaretheoremstyle[
+notefont=\textbf{},
+notebraces={}{:},
+headpunct=,
+bodyfont=\normalfont,
+headformat=\NAME .\NOTE,
+qed=\qedsymbol
+]{propstyle}
+\declaretheorem[style=propstyle]{prop}
+
+\declaretheoremstyle[
+notefont=\textbf{},
+notebraces={}{:},
+headpunct=,
+bodyfont=\normalfont,
+headformat=\NOTE
+]{affstyle}
+\declaretheorem[style=affstyle]{affermazione}
+%----------------------------------------------
+
+%codice
+%---------------------------------------------
+\lstset{language=c++}
+
+\definecolor{backcolour}{RGB}{68 71 90}
+\definecolor{parole}{RGB}{248 248 242}
+\definecolor{commento}{RGB}{98 114 164}
+
+\lstdefinestyle{mystyle}{
+backgroundcolor=\color{backcolour},
+basicstyle=\ttfamily\small\color{parole},
+keywordstyle=\color{orange},
+commentstyle=\color{commento}
+}
+
+\lstset{style=mystyle}
+%---------------------------------------------
+
+%comandi
+%-----------------------------------------------
+\newcommand{\s}{\hspace{1mm}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\und}{\underline{}}
+
+% Imposta la distanza tra il testo e il bordo delle celle
+\renewcommand{\arraystretch}{1.5}
+%-----------------------------------------------
+
+
+%mostra fino a section nell'indice
+%-----------------------------------------------
+\setcounter{tocdepth}{4}    
+
+%documento
+%-----------------------------------------------
+\title{Titolo}
+\author{Francesco Bonistalli}
+\date{data}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+\end{document}
