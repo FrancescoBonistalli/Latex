@@ -1,2 +1,3 @@
-# Latex-Prologue
-My favourite settings to create my latex documents
+# Latex
+The docuemtno "Latex-prologue" contains my favourites settings to create my latex documents.
+The project folder contains all my latex project done.
