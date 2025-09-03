@@ -1343,7 +1343,7 @@ Il valore medio dell'uscita è proporzionale al duty cycle.
 \subsubsection{Regolatore forward}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{img/reg fw.png}
+    \includegraphics[width=0.4\linewidth]{img/reg fw.png}
 \end{figure}
 \begin{nota}
     Filtro passa basso necessario per estrarre il valor medio del segnale senza dissipare energia.
@@ -1408,6 +1408,12 @@ Un segnale digitale è una sequenza finita di numeri, dove ognuno di essi rappre
 Questi sono i punti in cui $|\frac{\partial v_O}{\partial v_I}|=1$.
 
 \subsection{Caratteristiche dei circuiti digitali}
+\subsubsection{Fan-in e fan-out}
+\begin{itemize}
+	\item \textbf{fan in}: numero massimo di porte identiche in ingresso a una porta logica
+	\item \textbf{fan out}: numero massimo di porte identiche in uscita a una porta logica
+\end{itemize}
+Questi due valori sono limitati dalla potenza dissipata dal circuito che è proporzionale al numero di porte in ingresso e in uscita.
 \subsection{Inverter CMOS}
 Questa innovativa configurazione prevede l'uso di un PMOS e di un NMOS, utilizzati rispettivamente per gli ingressi alti e bassi. 
 L'idea di base è realizzare un circuito che abbia due interruttori in controfase, ovvero interruttori mai attivi contemporaneamente, in modo da avere una potenza statica dissipata nulla.
@@ -1416,11 +1422,266 @@ L'idea di base è realizzare un circuito che abbia due interruttori in controfas
     \centering
     \includegraphics[width=0.25\linewidth]{img/in cmos.png}
 \end{figure}
-
-
+\subsubsection{Caratteristiche di PMOS, NMOS e di uscita}
+\begin{center}
+	\includegraphics[width=0.5\linewidth]{"img/car cmos inv"}
+\end{center}
+Il nostro obbiettivo è quello di avere una caratteristica nella forma $\frac{V_u}{V_{in}}$.
+Per questo andremo a tracciare i grafici delle caratteristiche di uscita per i vari casi di $V_{in}$ e \textbf{trovare i punti in cui le due caratteristiche si intersecano}.
+\subsubsection{La caratteristica di trasferimento}
+La caratteristica di uscita si divide quindi in 5 zone, in ognuna delle quali i MOS assumo un comportamento diverso.
+\begin{center}
+	\includegraphics[width=0.5\linewidth]{"img/5 zone car di t"}
+\end{center}
 \section{Circuiti logici}
+\subsection{Inverter logico}
+\begin{center}
+	\includegraphics[width=0.3\linewidth]{"img/inv logic"}
+\end{center}
+\subsection{Schema generale di una porta logica}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{"img/schema port log"}
+	\caption{Schema di una porta logica con 3 ingressi}
+	\label{fig:schema-port-log}
+\end{figure}
+La Pull Up Network è la rete, composta da transistori PMOS, è responsabile del portare l’uscita $y$ al valore logico 1, mentre la Pull Down Network è la rete, formata dai transistori NMOS, che si occupa del portare l’uscita $y$ al valore logico 0: da questa descrizione è deducibile il fatto che queste reti non sono mai contemporaneamente attive.
+\subsection{Regole di progettazione}
+La regola fondamentale da seguire nella costruzione delle porte logiche con tecnologia CMOS è che mettere in serie due CMOS equivale ad un’operazione di AND, mentre mettere in parallelo due CMOS equivale ad un’operazione di OR.
+
+Esempi...
+\subsection{Porte NAND e NOR}
+Sono universali, ovvero permettono di realizzare qualsiasi altra porta logica.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\linewidth]{"img/porta nand"}
+	\caption{Porta NAND}
+	\label{fig:porta-nand}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\linewidth]{"img/porta nor"}
+	\caption{Porta NOR}
+	\label{fig:porta-nor}
+\end{figure}
+\subsection{Porte logiche più complesse}
+Sfruttiamo le leggi di De Morgan per ridurre le espressioni.
+\subsection{Osservazione e regole generali per le reti PUN e PDN}
+Esiste quindi una dualità tra la PUN (PUll Up Network) e la PDN (Pull Down Network): se è rispettata l’ipotesi degli ingressi tutti diretti, o tutti negati, allora la rete PUN è la dualità della PDN. Ciò vuol dire che se in una rete ho una serie, nella sua duale avrò un parallelo, e viceversa. É comunque necessario specificare che questa è una condizione sufficiente, ma non necessaria, per la dualità tra PUN e PDN.
+\subsection{La porta logica XOR}
+\begin{nota}
+	Possiamo subito mettere in pratica il principio di dualità appena introdotto, in questa porta non è infatti rispettata la condizione di avere tutti gli ingressi tutti diretti o tutti negati.
+\end{nota}
+Tramite le leggi di De Morgan semplifichiamo l'espressione e realizziamo il circuito:
+\begin{center}
+	\includegraphics[width=0.4\linewidth]{"img/circ xor"}
+\end{center}
+Per costruire questa porta logica ho bisogno di 2 MOS per ogni variabile e 2 ulteriori MOS per ogni variabile negata, in totale si avranno quindi:
+\[
+\#MOS = (2\cdot 4) + (2\cdot 2) = 12
+\]
+\subsection{Dualità con variabili non negate o non dirette}
+\[
+\begin{cases}
+	y = f(\bar{a}, b, \bar{c}) \to \text{sintesi diretta PUN} \\
+	u = f(\bar{a}, b, c) \to \text{sintesi dir. PUN + inverter } b, c
+\end{cases}
+\s
+\begin{cases}
+	\bar{y} = f(a, b, c) \to \text{sintesi diretta PDN} \\
+	\bar{y} = f(\bar{a}, b, c) \to \text{sintesi dir. PDN + inverter } b, c
+\end{cases}
+\]
+\subsection{Criteri di costo per i circuiti logici}
+\begin{definizione}
+	[Formula generale per il numero di MOS di una rete]
+	\[
+	\# MOS = 2\cdot (\text{numero di variabili}+\text{numero di variabili non negate})
+	\]
+\end{definizione}
+Il costo non dipende però unicamente dal numero di MOS ma anche dalla loro dimensione, infatti il produttore fornisce valori minimi per W (width del canale) e L (lenght del canale).
+\subsubsection{Costo in termini di area}
+\subsubsection{Costo in termini di tempo di commutazione}
+Nel caso peggiore le nostre porte \textbf{devono} avere tempo di commutazione uguale o inferiore a quello dell'inverter.
+\subsubsection{Stima dei costi per NAND e NOR}
+\paragraph{NOR}
+$\s$
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.25\linewidth]{"img/schema rete nor"}
+	\caption{Schema rete NOR}
+\end{figure}
+Per quanto riguarda la PUN, dove c'è una serie, abbiamo $\left(\frac{W}{L}\right)_{1,2,3,4} = x$, per cui:
+$$
+\frac{1}{x} + \frac{1}{x} + \frac{1}{x} + \frac{1}{x} = \frac{1}{p} \to 4p = 20
+$$
+Per quanto riguarda la PDN, dove c'è un parallelo, abbiamo $\left(\frac{W}{L}\right)_{5,6,7,8} = y$, per cui:
+$$
+\frac{1}{y} = \frac{1}{n} \to y = n = 2
+$$
+\paragraph{NAND}
+$\s$
+\begin{center}
+	\includegraphics[width=0.3\linewidth]{"img/schema rete nand"}
+\end{center}
+Per la PUN troviamo facilmente che:
+$$
+\left(\frac{W}{L}\right)_{1,2,3,4} = p = 5
+$$
+Per la PDN abbiamo $\left(\frac{W}{L}\right)_{5,6,7,8} = x$, per cui:
+$$
+\frac{1}{x} + \frac{1}{x} + \frac{1}{x} + \frac{1}{x} = \frac{1}{n} \to x = 4n = 8
+$$
+
+\subsubsection{Confronto}
+Avendo più configurazioni disponibili per una stessa porta logica, si sceglie sempre quella ad area minore.
+
+\subsection{Protezione dalle scariche elettrostatiche}
+È importante proteggere il MOS da scariche elettrostatiche (piccole cariche e grandi tensioni).
+\subsubsection{Circuito di sicurezza}
+È formato da una resistenza e 2 diodi
+\begin{center}
+	\includegraphics[width=0.4\linewidth]{"img/circ sicu"}
+\end{center}
+Durante il normale funzionamento del circuito i diodi non entrano in funzione (non modificano quindi il comportamento del circuito), quando entrano in conduzione invece si ha:
+\begin{itemize}
+	\item se $D_1$ è ON, allora $V_G = V_{DD} + V_{\gamma}$, quindi blocca le tensioni elevate;
+	\item se $D_2$ è ON, allora $V_G = -V_{\gamma}$, quindi blocca le tensioni troppo basse.
+\end{itemize}
+i diodi hanno quindi l'effetto di limitatori di tensione, mentre R serve a limitare le correnti che scorrono nei diodi, evitando che si danneggino.
+\subsubsection{Inconvenienti}
+L'utilizzo dei circuiti di protezione diminuisce il fan-out.
+\subsection{Logica pass-transistor}
+Logica che sfrutta i MOS come interruttori. 
+Ad esempio una rete che implementa la logica $y=A\cdot B \cdot C$ è 
+\begin{center}
+	\includegraphics[width=0.3\linewidth]{"img/es pass tra"}
+\end{center}
+mentre la rete per $y= A\cdot (B+C)$
+\begin{center}
+	\includegraphics[width=0.3\linewidth]{"img/es pass tra 2"}
+\end{center}
+\begin{nota}
+	In circuiti di questo tipo deve essere \textbf{sempre} presente un collegamento tra ground e l'uscita.
+\end{nota}
+\subsubsection{L'interruttore ideale}
+\paragraph{Considerazioni finali}
+Né il PMOS che l'NMOS sono in grado di trasmettere correttamente sia valori logici alti che bassi.
+\subsubsection{Il Pass-gate}
+Dispositivo che effettivamente si comporta da interruttore ideale, composto da un NMOS e un PMOS in parallelo.
+\begin{center}
+	\includegraphics[width=0.3\linewidth]{"img/pass gate"}
+\end{center}
+Il dispositivo è comandato sia dal segnale diretto che quello negato, risolvendo la problematica della trasmissione non ottimale dei valori logici, poiché il segnale alto viene trasmesso dal PMOS, mentre il segnale basso dal NMOS.
+\subsubsection{Differenze tra circuiti con CMOS e pass-transistor}
+Nel circuito con pass transistor si utilizzano molti meno MOS rispetto all'equivalente circuito con CMOS.
+\subsection{Il dispositivo NE555}
+É un circuito discreto che si presta a diversi utilizzi, vista la sua versatilità. Tra i possibili usi abbiamo il generare onde quadre, funzione di timer, generatore di impulso.
+\subsubsection{Vista esterna}
+Il circuito dall'esterno appare come un circuito integrato a 8 pin.
+\begin{center}
+	\includegraphics[width=0.5\linewidth]{img/ne555}
+\end{center}
+\begin{nota}
+	1 e 8 sono di alimentazione.
+\end{nota}
+\subsubsection{Schema interno}
+\begin{center}
+	\includegraphics[width=0.5\linewidth]{"img/ne555 interno"}
+\end{center}
+\begin{itemize}
+	\item $V_{CC}$ posta per semplicità di calcolo a $6V$
+	\item $TH$ e $TR$ entranti rispettivamente dai pin 6 e 2
+	\item reset è variabile attiva bassa dal piedino 4
+	\item Q e D uscite ai piedini 3 e 7
+\end{itemize}
+\subsubsection{Simbolo circuitale}
+\begin{center}
+	\includegraphics[width=0.3\linewidth]{"img/ne555 s circ"}
+\end{center}
+\subsubsection{Zona di funzionamento}
+\begin{center}
+	\includegraphics[width=0.4\linewidth]{"img/ne555 zf"}
+\end{center}
+\subsubsection{Circuito astabile con NE555}
+\paragraph{Introduzione ai multivibratori}
+Circuiti che, a seconda della funzione, si dividono in:
+\begin{enumerate}
+	\item \textbf{Monostabile}: ha un solo stato stabile, e l'altro è instabile. Il circuito, portato sullo stato instabile, tende a tornare allo stato stabile. Il circuito è utilizzato per generare impulsi di durata variabile, e per questo motivo è utilizzato come timer;
+	\item \textbf{Astabile}: ha due stati instabili, e il circuito tende a passare da uno all'altro. Il circuito è utilizzato per generare onde quadre, come \textbf{il clock};
+	\item \textbf{Bistabile}: ha due stati stabili, e passa da uno all'altro solo se viene comandato. Il circuito è utilizzato per memorizzare un valore, come \textbf{i flip-flop}.
+\end{enumerate}
+\paragraph{Cricuito astabile}
+Un esempio costruito con il NE555 è:
+\begin{center}
+	\includegraphics[width=0.3\linewidth]{"img/ne555 astabile"}
+\end{center}
+
+\subsection{Oscillatore ad anello}
+Semplice circuito logico in cui vengono inseriti in cascata un numero dispari di inverter.
+\begin{center}
+	\includegraphics[width=0.3\linewidth]{"img/oscill an"}
+\end{center}
+\begin{nota}
+	Tutta la successiva analisi ha come ipotesi che il tempo di propagazione sia uguale per tutti gli inverter.
+\end{nota}
 
 \section{Logica sequenziale}
+\begin{definizione}
+	[Circuito sequenziale]
+	Circuito in cui l'uscita non dipende soltanto dagli ingressi ma anche dallo stato interno (quindi dalla storia degli eventi).
+\end{definizione}
+Questa loro caratteristica implica la presenza di elementi di memoria all'interno del circuito, di questi, in particolare, ne esistono due tipologie.
+
+\subsection{Elementi di memoria statica}
+Implementata tramite circuiti \textbf{bistabili} ovvero caratterizzati da due stati stabili detti, \textit{stati di memoria}, che vengono mantenuti fintanto non viene applicato un segnale di \textit{set} o di \textit{reset}.
+I circuiti bistabili sono implementati tramite latch e flip‑flop. Ogni circuito bistabile è quindi in grado di memorizzare un bit di informazione.
+\subsubsection{Latch}
+Il latch è un circuito multivibratore bistabile, che accetta gli stati 0 - 1 e 1 - 0. Un possibile latch, realizzato con due inverter in reazione, è il seguente:
+\begin{center}
+	\includegraphics[width=0.3\linewidth]{"img/latch 2 inv"}
+\end{center}
+Per studiare gli stati interni rompiamo però la retroazione del circuito, imponiamo la condizione di $V_{O2} = V_{I1}$ e intersechiamo la retta così trovata applicando due volte quella di un inverter: otteniamo 3 punti di lavoro.
+\begin{center}
+	\includegraphics[width=0.3\linewidth]{"img/latch 2 inv1"}
+\end{center}
+A e C sono gli stati stabili già noti, B è considerato come uno stato \textbf{metastabile}: raggiungibile teoricamente quando $V_{O2} = V_{I1}=\frac{V_{DD}}{2}$ ma collasserà sempre in uno stato stabile. 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
